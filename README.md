@@ -20,11 +20,15 @@ Run project
 nodemon server.js
 ```
 
+## Running Graphql HTTP
+
 View in browser
 
 ```
 localhost:5500/graphql
 ```
+
+Paste the content of "Graphql_HTTP_Queries.txt" in the query window to access project queries.
 
 ## Licensing
 

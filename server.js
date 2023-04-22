@@ -85,7 +85,7 @@ type DeleteResponse{
   ok: Boolean!
 }
 type Mutation{
-  setrestaurant(input: restaurantInput): restaurant
+  setrestaurant(newRestaurant: restaurantInput): restaurant
   deleterestaurant(id: Int!): DeleteResponse
   editrestaurant(id: Int!, name: String!): restaurant
 }
@@ -93,21 +93,25 @@ type Mutation{
 // The root provides a resolver function for each API endpoint
 
 var root = {
-  restaurant: (arg) => {
-    return restaurants[arg.id]
+  restaurant: ({ id }) => {
+    const restaurantMatch = restaurants.find(r => r.id == id)
+    if (!restaurantMatch) {
+      throw new Error(`Restaurant with ID:${id} does not exist!`);
+    }
+    return restaurantMatch
   },
   restaurants: () => {
     return restaurants
   },
-  setrestaurant: ({ input: newRestaurent }) => {
+  setrestaurant: ({ newRestaurant }) => {
     restaurants.push(
       {
-        name: newRestaurent.name,
-        email: newRestaurent.email,
-        age: newRestaurent.age
+        name: newRestaurant.name,
+        email: newRestaurant.email,
+        age: newRestaurant.age
       }
     );
-    return newRestaurent;
+    return newRestaurant;
   },
   deleterestaurant: ({ id }) => {
     const ok = Boolean(restaurants[id]);
