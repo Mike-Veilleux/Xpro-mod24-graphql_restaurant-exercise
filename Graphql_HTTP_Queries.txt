@@ -2,7 +2,7 @@ query GetRestaurantById($iid: Int = 1){
   restaurant(id: $iid)
   {
     id
-      name
+    name
     description
     dishes {
       name
@@ -13,6 +13,7 @@ query GetRestaurantById($iid: Int = 1){
 
 query GetAllRestaurants {
   restaurants {
+    id
     name
     description
     dishes {
@@ -56,7 +57,7 @@ mutation EditRestaurants($idd: Int = 1, $name: String = "OLDO") {
 
 
 
-mutation DeleteRestaurants($iid: Int = 1) {
+mutation DeleteRestaurants($iid: Int = 2) {
   deleterestaurant(id: $iid) {
     ok
   }
