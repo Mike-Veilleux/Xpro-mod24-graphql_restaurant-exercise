@@ -1,4 +1,4 @@
-# Graphql Restaurent Exercise
+# Graphql Restaurant Exercise
 
 CRUD operation with GraphQL HTTP on Node server.
 
