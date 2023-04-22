@@ -108,16 +108,17 @@ var root = {
     return restaurants
   },
   setrestaurant: ({ newRestaurant }) => {
-    restaurants.push(
-      {
-        name: newRestaurant.name,
-        description: newRestaurant.description,
-        dishes: newRestaurant.dishes
-
-      }
-    );
-    console.log("Restaurant succesfully added!\n", JSON.stringify(newRestaurant));
-    return newRestaurant;
+    // find highest ID value in array and add 1
+    const newID = Math.max(...restaurants.map(r => r.id), 0) + 1;
+    const newRestaurantWithID = {
+      id: newID,
+      name: newRestaurant.name,
+      description: newRestaurant.description,
+      dishes: newRestaurant.dishes
+    }
+    restaurants.push(newRestaurantWithID);
+    console.log("Restaurant succesfully added!\n", JSON.stringify(newRestaurantWithID));
+    return newRestaurantWithID;
   },
   deleterestaurant: ({ id }) => {
     const restaurantMatch = restaurants.find(r => r.id == id)
