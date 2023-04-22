@@ -2,7 +2,6 @@ const { graphqlHTTP } = require("express-graphql");
 const { buildSchema, assertInputType } = require("graphql");
 const express = require("express");
 
-
 // Construct a schema, using GraphQL schema language
 var restaurants = [
   {
@@ -77,9 +76,14 @@ type Dish{
   name: String
   price: Int
 }
+input dishInput{
+  name: String
+  price: Int
+}
 input restaurantInput{
   name: String
   description: String
+  dishes: [dishInput!]!
 }
 type DeleteResponse{
   ok: Boolean!
@@ -107,28 +111,38 @@ var root = {
     restaurants.push(
       {
         name: newRestaurant.name,
-        email: newRestaurant.email,
-        age: newRestaurant.age
+        description: newRestaurant.description,
+        dishes: newRestaurant.dishes
+
       }
     );
+    console.log("Restaurant succesfully added!\n", JSON.stringify(newRestaurant));
     return newRestaurant;
   },
   deleterestaurant: ({ id }) => {
-    const ok = Boolean(restaurants[id]);
-    const restaurentToDelete = restaurants[id];
-    restaurants = restaurants.filter((restaurent) => restaurent.id !== id);
-    console.log(JSON.stringify(restaurentToDelete));
+    const restaurantMatch = restaurants.find(r => r.id == id)
+    if (!restaurantMatch) {
+      throw new Error(`Restaurant with ID:${id} does not exist!`);
+    }
+    const deletedRestaurantIndex = restaurants.findIndex(r => r.id == id)
+    const ok = Boolean(restaurants[deletedRestaurantIndex]);
+    restaurants.splice(deletedRestaurantIndex, 1)
+    console.log("Reataurant succesfully deleted!\n", JSON.stringify(restaurantMatch));
     return { ok };
   },
   editrestaurant: ({ id, ...restaurant }) => {
-    if (!restaurants[id]) {
+    let restaurantMatch = restaurants.find(r => r.id == id)
+    if (!restaurantMatch) {
       throw new Error(`Restaurant with ID:${id} does not exist!`);
     }
-    restaurants[id] = {
-      ...restaurants[id],
+    restaurantMatch = {
+      ...restaurantMatch,
       ...restaurant,
     };
-    return restaurants[id];
+    const editedRestaurantIndex = restaurants.findIndex(r => r.id == id);
+    restaurants.splice(editedRestaurantIndex, 1, restaurantMatch)
+    console.log("Restaurant succesfully updated!\n", JSON.stringify(restaurantMatch));
+    return restaurantMatch;
   },
 };
 var app = express();

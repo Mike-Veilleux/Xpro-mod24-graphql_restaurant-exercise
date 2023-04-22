@@ -26,9 +26,23 @@ mutation SetRestaurants {
   setrestaurant(newRestaurant: {
     name: "Granite",
     description: "American",
+    dishes : [
+      {
+        name: "Mike's Special",
+        price: 12
+      },
+      {
+        name: "Mike's Super Special",
+        price: 100
+      }
+    ]
   }) {
-    name
+     name
     description
+    dishes {
+      name
+      price
+    }
   }
 }
 
@@ -47,3 +61,7 @@ mutation DeleteRestaurants($iid: Int = 1) {
     ok
   }
 }
+
+
+
+
